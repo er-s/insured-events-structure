@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { FieldType, FormlyFieldConfig } from '@ngx-formly/core';
+import { NgSelectComponent } from '@ng-select/ng-select';
 import { Subject, Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, takeUntil, tap, finalize, filter, catchError } from 'rxjs/operators';
 
@@ -38,6 +39,8 @@ export class FormlyNgSelectTypeComponent extends FieldType<FormlyFieldConfig> im
 
   /** Tracks if we are in async/typeahead mode. */
   private usingAsync = false;
+
+  @ViewChild(NgSelectComponent) private ngSelect?: NgSelectComponent;
 
 
 
@@ -164,6 +167,9 @@ export class FormlyNgSelectTypeComponent extends FieldType<FormlyFieldConfig> im
     if (this.getTo<boolean>('readOnly')) { return; }
     const cb = this.getTo<((value: any, field?: FormlyFieldConfig) => void)>('onChange');
     if (cb) { cb(value, this.field); }
+    if (this.ngSelect && this.getTo('closeOnSelect', true)) {
+      this.ngSelect.close();
+    }
   }
 
 
