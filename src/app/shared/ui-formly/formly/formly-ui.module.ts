@@ -7,7 +7,7 @@ import { FormlyNgSelectTypeModule } from './formly-float-select/formly-ng-select
 
 @NgModule({
     declarations: [],
-    imports: [CommonModule, ReactiveFormsModule, FormlyNgSelectTypeModule],
+    imports: [CommonModule, ReactiveFormsModule, FormlyModule, FormlyNgSelectTypeModule],
     exports: [ReactiveFormsModule, FormlyModule, FormlyNgSelectTypeModule]
 })
 export class FormlyUiModule {}
