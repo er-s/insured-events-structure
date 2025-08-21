@@ -1,0 +1,73 @@
+<div class="autocomplete-container">
+    <ng-select
+        [id]="id"
+        [items]="items"
+        [bindLabel]="to.bindLabel || to.labelProp || 'label'"
+        [bindValue]="to.bindValue || to.valueProp || 'value'"
+        [multiple]="to.multiple"
+        [clearable]="to.clearable !== false"
+        [searchable]="to.searchable !== false"
+        [placeholder]="to.placeholder || ''"
+        [groupBy]="to.groupBy"
+        [compareWith]="to.compareWith"
+        [virtualScroll]="to.virtualScroll"
+        [bufferAmount]="to.bufferAmount || 4"
+        [appendTo]="to.appendTo"
+        [dropdownPosition]="to.dropdownPosition || 'auto'"
+        [closeOnSelect]="to.closeOnSelect !== false"
+        [maxSelectedItems]="to.maxSelectedItems"
+        [hideSelected]="to.hideSelected"
+        [selectOnTab]="to.selectOnTab"
+        [markFirst]="to.markFirst"
+        [addTag]="to.addTag"
+        [addTagText]="to.addTagText"
+        [loading]="loading || to.loading"
+        [readonly]="to.readOnly"
+        [disabled]="to.disabled || to.readOnly || formControl.disabled"
+        [ngClass]="to.containerClass"
+        [class.is-invalid]="showError"
+        [notFoundText]="to.notFoundText"
+        [typeToSearchText]="to.typeToSearchText"
+        [loadingText]="to.loadingText"
+        [formControl]="control"
+        [attr.aria-labelledby]="id"
+        [attr.aria-required]="to.required"
+        [attr.aria-invalid]="showError"
+        (open)="handleOpen()"
+        (close)="handleClose()"
+        (focus)="handleFocus()"
+        (blur)="handleBlur()"
+        (change)="handleChange($event)"
+        (search)="handleSearch($event.term)"
+        (clear)="handleClear()"
+        (scrollToEnd)="to.infiniteScroll ? loadMore() : null"
+    >
+        <ng-template ng-option-tmp let-item="item" let-index="index">
+            <span
+                >{{ item[to.bindLabel || to.labelProp || 'label'] || item
+                }}</span
+            >
+        </ng-template>
+        <ng-template ng-label-tmp let-item="item">
+            <span
+                >{{ item[to.bindLabel || to.labelProp || 'label'] || item
+                }}</span
+            >
+        </ng-template>
+        <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            <span
+                *ngFor="let it of items; let i = index"
+                class="badge bg-secondary me-1"
+            >
+                {{ it[to.bindLabel || to.labelProp || 'label'] || it }}
+                <button
+                    type="button"
+                    class="btn-close btn-close-white btn-sm ms-1"
+                    aria-label="Remove"
+                    (click)="clear(it)"
+                ></button>
+            </span>
+        </ng-template>
+    </ng-select>
+    <div></div>
+</div>

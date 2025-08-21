@@ -1,0 +1,56 @@
+<div
+  [ngClass]="{
+    error: showError,
+    success: showSuccess$ | async
+  }"
+  class="input-container w-100">
+  <input
+    (blur)="onTouched()"
+    (focus)="onFocus()"
+    (keypress)="onKeyPress($event)"
+    (ngModelChange)="onValueChange($event)"
+    [attr.maxlength]="(fieldConfig$ | async)?.maxLength"
+    [attr.placeholder]="(fieldConfig$ | async)?.placeholder"
+    [clearIfNotMatch]="(fieldConfig$ | async)?.clearIfNotMatch"
+    [dropSpecialCharacters]="(fieldConfig$ | async)?.dropSpecialCharacters"
+    [formlyAttributes]="field"
+    [mask]="(fieldConfig$ | async)?.mask"
+    [patterns]="(fieldConfig$ | async)?.patterns || {}"
+    [ngClass]="{
+        'has-content': hasContent$ | async,
+        'is-invalid': showError,
+        'is-valid': showSuccess$ | async,
+        disabled: (fieldConfig$ | async)?.isDisabled
+      }"
+    [ngModel]="value$ | async"
+    [prefix]="(fieldConfig$ | async)?.prefix"
+    [readonly]="(fieldConfig$ | async)?.isDisabled"
+    [showMaskTyped]="(fieldConfig$ | async)?.showMaskTyped"
+    [type]="(fieldConfig$ | async)?.type"
+    class="form-input"
+  />
+
+  <label [ngClass]="{ float: shouldFloatLabel$ | async }">
+    {{ (fieldConfig$ | async)?.label }}
+  </label>
+
+  <div
+    *ngIf="showSuccess$ | async"
+    class="success-icon-container">
+    <i class="bi bi-check-circle success-icon"></i>
+  </div>
+
+  <div
+    *ngIf="(helperText$ | async) && !(showSuccess$ | async)"
+    class="info-icon-container">
+    <i
+      [title]="helperText$ | async"
+      class="bi bi-exclamation-circle info-icon"></i>
+  </div>
+
+  <ng-container *ngIf="showError">
+    <div class="error-message">
+      {{ getErrorMessage() }}
+    </div>
+  </ng-container>
+</div>

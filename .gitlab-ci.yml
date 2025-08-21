@@ -1,0 +1,45 @@
+variables:
+  NODE_ENV: "development"
+
+stages:
+  - build
+  - publish
+
+build:
+  stage: build
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /^main$/
+      when: always
+      allow_failure: false
+    - if: $CI_COMMIT_BRANCH =~ /^REL-[0-9.]+$/
+      when: manual
+      allow_failure: false
+  when: manual
+  image: repo.vsk.ru:5000/library/node:14-alpine
+  tags:
+    - docker
+    - linux
+  artifacts:
+    paths:
+      - ./dist
+    expire_in: 1 sec
+  script:
+    - npm cache clean --force
+    - npm install
+    - npm run build
+
+publish:
+  stage: publish
+  only:
+    - /^main$/
+    - /^REL-[0-9.]+$/
+  when: on_success
+  image: repo.vsk.ru:5000/library/node:14-alpine
+  tags:
+    - docker
+    - linux
+  script:
+    - cp package.json dist/insured-events/package.json
+    - cd dist/insured-events
+    - npm config set _auth $MARLIN_AUTH
+    - npm publish --registry=http://repo.vsk.ru/repository/npm-vsk/
